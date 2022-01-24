@@ -1,0 +1,5 @@
+\n
+download: %{speed_download}\n
+download size: %{size_download} bytes\n
+upload: %{speed_upload}\n
+upload size: %{size_upload} bytes\n

@@ -1,0 +1,9 @@
+\n
+time_namelookup:  %{time_namelookup} seconds\n
+time_connect:  %{time_connect} seconds\n
+time_appconnect:  %{time_appconnect} seconds\n
+time_pretransfer:  %{time_pretransfer} seconds\n
+time_redirect:  %{time_redirect} seconds\n
+time_starttransfer:  %{time_starttransfer} seconds\n
+----------\n
+time_total:  %{time_total} seconds\n
