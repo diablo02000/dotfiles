@@ -28,3 +28,15 @@ function urlencode() {
   done
   echo "${encoded}"
 }
+
+# b64encode '<STRING>'
+functoin b64encode(){
+    local string="${1}"
+    echo -n "${string}" | base64
+}
+
+# b64decode '<STRING>'
+functoin b64decode(){
+    local b64encoded="${1}"
+    echo -n "${b64encoded}" | base64 -d
+}
