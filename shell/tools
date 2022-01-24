@@ -1,3 +1,10 @@
+# createWorkingSpace
+function createWorkingSpace() {
+	local WORKSPACE="${HOME}/workspaces/$(date +%F)"
+	[[ ! -d "${WORKSPACE}" ]] && mkdir -p "${WORKSPACE}"
+	cd "${WORKSPACE}"
+}
+
 # urldecode '<STRING>'
 function urldecode() {
     local url_encoded="${1//+/ }"
