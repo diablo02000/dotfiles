@@ -1,3 +1,4 @@
 # Custom shell alias
 alias cdw="createWorkingSpace"
 alias curl_json="curl -s -H 'Content-Type: application/json'"
+alias shellcheck="shellcheck -x"
