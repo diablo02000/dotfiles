@@ -1,14 +1,27 @@
 # Custom shell alias
 
+# Change directory to home subdirectory
+alias cdl='cd ~/Downloads'
+alias cdd='cd ~/Documents'
+
 # Create working directory
 # use 'createWorkingSpace' from functions file.
-alias cdw="createWorkingSpace"
+alias cdw='createWorkingSpace'
 
-# Curl shortcut
-alias jcurl="curl -s -H 'Content-Type: application/json'"
+# Send HTTP curl with JSON content type
+alias jcurl='curl -s -H "Content-Type: application/json"'
+
+# URL-encode strings
+alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
+
+# Get current day
+alias today='date +%F" "%X'
+
+# Get current week
+alias week='date +%V'
 
 #
 # Linter
 #
 # Shell linter
-alias scheck="shellcheck -x"
+alias scheck='shellcheck -x'
