@@ -1,0 +1,2 @@
+# Remove duplicate command in history.
+setopt HIST_IGNORE_ALL_DUPS
