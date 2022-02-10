@@ -20,6 +20,9 @@ alias today='date +%F" "%X'
 # Get current week
 alias week='date +%V'
 
+# Show IP addresses
+alias pubip='dig +short myip.opendns.com @resolver1.opendns.com'
+
 #
 # Linter
 #
