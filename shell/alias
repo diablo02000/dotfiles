@@ -3,6 +3,7 @@
 # Change directory to home subdirectory
 alias cdl='cd ~/Downloads'
 alias cdd='cd ~/Documents'
+alias cdi="cd ~/Images"
 
 # Create working directory
 # use 'createWorkingSpace' from functions file.
