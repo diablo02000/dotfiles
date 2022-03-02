@@ -10,13 +10,24 @@ function createWorkingSpace() {
 }
 
 # Encode string in base64
-functoin b64encode(){
+function b64encode(){
     local string="${1}"
     echo -n "${string}" | base64
 }
 
 # Decode base64 to string
-functoin b64decode(){
+function b64decode(){
     local b64encoded="${1}"
     echo -n "${b64encoded}" | base64 -d
+}
+
+# Check if json is valid
+function jsonIsValide(){
+    if jq -e . >/dev/null 2>&1 <<<"${1}";
+    then
+        echo "JSON is valid"
+    else
+        echo "JSON not valid"
+        jq -e . >/dev/null <<<"${1}"
+    fi
 }
