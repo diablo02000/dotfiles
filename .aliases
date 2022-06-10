@@ -23,6 +23,7 @@ alias week='date +%V'
 
 # Show IP addresses
 alias pubip='dig +short myip.opendns.com @resolver1.opendns.com'
+alias privip="ip -j -br -4 addr list | jq -r '.[] | select(.operstate==\"UP\") | .addr_info[].local'"
 
 #
 # Linter
