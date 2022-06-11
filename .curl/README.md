@@ -35,5 +35,3 @@ download size: 13593 bytes
 upload: 0 bytes/sec
 upload size: 0 bytes
 ```
-
-Official link [here](https://curl.se/docs/manpage.html)
