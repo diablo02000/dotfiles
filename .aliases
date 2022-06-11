@@ -28,6 +28,12 @@ alias hosts="sudo vim /etc/hosts"
 alias pubip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias privip="ip -j -br -4 addr list | jq -r '.[] | select(.operstate==\"UP\") | .addr_info[].local'"
 
+# Pipe my public key to my clipboard.
+alias pubkey="more ~/.ssh/keys.d/id_ecdsa.pub | xclip -selection clipboard | echo '=> Public key copied to pasteboard.'"
+
+# Pipe my private key to my clipboard.
+alias prikey="more ~/.ssh/keys.d/id_ecdsa | xclip -selection clipboard | echo '=> Private key copied to pasteboard.'"
+
 #
 # Linter
 #
