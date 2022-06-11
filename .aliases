@@ -12,6 +12,9 @@ alias cdw='createWorkingSpace'
 # Send HTTP curl with JSON content type
 alias jcurl='curl -s -H "Content-Type: application/json"'
 
+# Send HTTP curl with trace time
+alias tcurl='curl -s -o /dev/null -w @"${DOTFILES_DIRNAME}/.curl/time-taken.txt"'
+
 # URL-encode strings
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
 

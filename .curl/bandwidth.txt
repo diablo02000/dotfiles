@@ -1,4 +1,6 @@
 \n
+%{method} %{url} => %{http_code}\n
+\n
 download: %{speed_download}\n
 download size: %{size_download} bytes\n
 upload: %{speed_upload}\n
