@@ -2,11 +2,13 @@
 
 Several cURL out formats.
 
-**>> NOTE: You can find more informations on the [curl manpage](https://linux.die.net/man/1/curl)**
+> **_NOTE_**: You can find more informations on the [curl manpage](https://linux.die.net/man/1/curl)
 
 ## How to use
 
 The text files can be use with `curl` command:
+
+- show curl time taken:
 
 ```bash
 ~$ curl -s -o /dev/null  -w @time-taken.txt https://linux.die.net/man/1/curl
@@ -20,3 +22,18 @@ time_starttransfer:  0.669313 seconds
 ----------
 time_total:  0.818493 seconds
 ```
+
+- show curl bandwith:
+
+```bash
+~$ curl -s -o /dev/null -w @bandwith.txt https://linux.die.net/man/1/curl
+
+GET www.google.fr => 200
+
+download: 249454 bytes/sec
+download size: 13593 bytes
+upload: 0 bytes/sec
+upload size: 0 bytes
+```
+
+Official link [here](https://curl.se/docs/manpage.html)
