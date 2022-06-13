@@ -10,3 +10,9 @@ do
 	source "${file}"
 done
 unset file
+
+# Load specific file for Mac OS
+if [[ $OSTYPE == 'darwin'* ]];
+then
+    source "${DOTFILES_DIRNAME}/.bindkeys_macos"
+fi
