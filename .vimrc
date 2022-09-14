@@ -65,3 +65,8 @@ set scrolloff=8
 " Do not tell vim to show me if I am visual mode
 " Airline plugin already do it.
 set noshowmode
+
+set conceallevel=1
+
+" Disable bells sound
+set noerrorbells visualbell t_vb=
