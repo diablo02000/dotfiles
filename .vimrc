@@ -48,3 +48,20 @@ set autoindent
 set smartindent
 set smarttab
 set expandtab
+
+" Print invisible characters
+set list
+set listchars=eol:.,tab:>-,trail:~,extends:>,precedes:<
+
+" Highlights the whole line where is my cursor
+set cursorline
+
+" Enable line number
+set number
+
+" Start scrolling page 8 lines before cursor reeach the bottom.
+set scrolloff=8
+
+" Do not tell vim to show me if I am visual mode
+" Airline plugin already do it.
+set noshowmode
