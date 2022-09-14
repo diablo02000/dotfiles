@@ -34,3 +34,17 @@ set fileformat=unix
 " set encoding to UTF-8
 set encoding=UTF-8
 
+" Setup indentation for Python file.
+au BufNewFile,BufRead *.py
+      \ set tabstop=4 |
+      \ set softtabstop=4 |
+      \ set shiftwidth=4 |
+
+" Setup default global indentation settings
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set autoindent
+set smartindent
+set smarttab
+set expandtab
