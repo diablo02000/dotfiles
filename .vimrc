@@ -24,3 +24,13 @@ let g:airline_powerline_fonts = 1
 
 " Initialize plugin system
 call plug#end()
+
+" Enable syntaxhighlighting
+syntax on
+
+" Force fileformat for Linux and Mac OS'
+set fileformat=unix
+
+" set encoding to UTF-8
+set encoding=UTF-8
+
