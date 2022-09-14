@@ -70,3 +70,8 @@ set conceallevel=1
 
 " Disable bells sound
 set noerrorbells visualbell t_vb=
+
+" Enable undofile
+set undodir=~/.vim/undodir
+set undofile
+
