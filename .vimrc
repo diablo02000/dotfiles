@@ -75,3 +75,9 @@ set noerrorbells visualbell t_vb=
 set undodir=~/.vim/undodir
 set undofile
 
+" Setup search mode
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+nnoremap <CR> :noh<CR><CR>:<backspace>
