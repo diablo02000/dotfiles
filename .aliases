@@ -13,7 +13,7 @@ alias cdw='createWorkingSpace'
 alias jcurl='curl -s -H "Content-Type: application/json"'
 
 # Send HTTP curl with trace time
-alias tcurl='curl -s -o /dev/null -w @"${DOTFILES_DIRNAME}/.curl/time-taken.txt"'
+alias tcurl='curl -s -o /dev/null -w @"${HOME}/.curl/time-taken.txt"'
 
 # URL-encode strings
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
@@ -32,10 +32,10 @@ alias pubip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias privip="ip -j -br -4 addr list | jq -r '.[] | select(.operstate==\"UP\") | .addr_info[].local'"
 
 # Pipe my public key to my clipboard.
-alias pubkey="more ~/.ssh/keys.d/id_ecdsa.pub | xclip -selection clipboard | echo '=> Public key copied to pasteboard.'"
+alias pubkey="more ${DOTFILES_SSH_KEY_FULL_PATH}.pub | xclip -selection clipboard | echo '=> Public key copied to pasteboard.'"
 
 # Pipe my private key to my clipboard.
-alias prikey="more ~/.ssh/keys.d/id_ecdsa | xclip -selection clipboard | echo '=> Private key copied to pasteboard.'"
+alias prikey="more ${DOTFILES_SSH_KEY_FULL_PATH} | xclip -selection clipboard | echo '=> Private key copied to pasteboard.'"
 
 #
 # Linter
