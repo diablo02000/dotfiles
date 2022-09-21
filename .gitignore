@@ -1,8 +1,5 @@
-
-# Created by https://www.toptal.com/developers/gitignore/api/vim,code,linux
-# Edit at https://www.toptal.com/developers/gitignore?templates=vim,code,linux
-
-#!! ERROR: code is undefined. Use list command to see defined gitignore types !!#
+# Created by https://www.toptal.com/developers/gitignore/api/vim,linux,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=vim,linux,visualstudiocode
 
 ### Linux ###
 *~
@@ -39,5 +36,33 @@ tags
 # Persistent undo
 [._]*.un~
 
-# End of https://www.toptal.com/developers/gitignore/api/vim,code,linux
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
+# Support for Project snippet scope
+.vscode/*.code-snippets
+
+# Ignore code-workspaces
+*.code-workspace
+
+# End of https://www.toptal.com/developers/gitignore/api/vim,linux,visualstudiocode
 n
+
+# Do not follow user projet configuration file
+.env
