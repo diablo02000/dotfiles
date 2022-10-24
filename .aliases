@@ -45,3 +45,11 @@ alias ftrailing_whitespace="sed -i 's/[ \t]*$//'"
 #
 # Shell linter
 alias scheck='shellcheck -x'
+
+#
+# Database client
+#
+# Overload db client to redirect console
+# to file.
+alias psql='dbClientTrace psql'
+alias mysql='dbClientTrace mysql'

@@ -31,3 +31,51 @@ function jsonIsValide(){
         jq -e . >/dev/null <<<"${1}"
     fi
 }
+
+# Run db client like psql or mysql  and store
+# console output to log file.
+function dbClientTrace(){
+  # Get db client tool name
+  local DB_CLIENT_TOOL_NAME="${1}"
+  shift
+
+  # Get username and database name
+  # from command arguments
+  POSITIONAL_ARGS=()
+
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      -U|-u)
+        DB_USERNAME="$2"
+        shift
+        shift
+        ;;
+      -d|-D)
+        DB_NAME="$2"
+        shift
+        shift
+        ;;
+      *)
+        POSITIONAL_ARGS+=("$1")
+        shift
+        ;;
+    esac
+  done
+
+  set -- "${POSITIONAL_ARGS[@]}"
+
+  # Create path to log file
+  local DB_CLIENT_LOG_FILE="$(printf "%s/%s-%s-%s-%d.log" "/var/log/db_client" ${DB_CLIENT_TOOL_NAME} ${DB_USERNAME} ${DB_NAME} $(date +%s))"
+
+  # Build client cmd
+  if [[ ${DB_CLIENT_TOOL_NAME} == "mysql" ]];
+  then
+    \mysql $@ -u "${DB_USERNAME}" -D "${DB_NAME}" --tee="${DB_CLIENT_LOG_FILE}"
+  elif [[ ${DB_CLIENT_TOOL_NAME} == "psql" ]];
+  then
+    \psql $@ -U "${DB_USERNAME}" -d "${DB_NAME}" -L "${DB_CLIENT_LOG_FILE}"
+  else
+    echo -e "${DB_CLIENT_TOOL_NAME} not manage"
+  fi
+}
+
