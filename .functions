@@ -79,3 +79,21 @@ function dbClientTrace(){
   fi
 }
 
+# Push gitlab pipeline YAML file to
+# Gitlab Linter API endpoint for syntax
+# verification
+function gitlabCiLinter(){
+  # Get path to gitlab-ci file.
+  local gitlab_ci_file="${1:=.gitlab-ci.yml}"
+
+  if [[ -z $GITLAB_HOST ]] || [[ -z $GITLAB_PRIVATE_TOKEN ]];
+  then
+    echo -e "'GITLAB_HOST' or 'GITLAB_PRIVATE_TOKEN' variables not define."
+  else
+    # Send gitlab-ci file content to API.
+    jq --null-input --arg yaml "$(<${gitlab_ci_file})" '.content=$yaml' \
+    | curl --header "PRIVATE-TOKEN: ${GITLAB_PRIVATE_TOKEN}" \
+          --header 'Content-Type: application/json' \
+          "https://${GITLAB_HOST}/api/v4/ci/lint?include_merged_yaml=true" --data @- | jq
+  fi
+}
