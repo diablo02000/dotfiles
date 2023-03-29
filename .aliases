@@ -6,7 +6,7 @@ alias cdd='cd ~/Documents'
 alias cdi="cd ~/Images"
 
 # Reload zsh configuration file
-alias zshreload='source ~/.zshrc'
+alias zsh-reload='source ~/.zshrc'
 
 # Create working directory
 # use 'createWorkingSpace' from functions file.
