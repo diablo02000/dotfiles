@@ -4,10 +4,17 @@ setopt HIST_IGNORE_ALL_DUPS
 # Get custom zsh dirname
 export DOTFILES_DIRNAME="$(dirname $0)"
 
-# Load custom config files
+# Load aliases and functions files
 for file in "${DOTFILES_DIRNAME}"/.{aliases,functions};
 do
 	source "${file}"
+done
+unset file
+
+# Load custom files
+for file in "${DOTFILES_DIRNAME}"/.{aliases,functions}_custom;
+do
+  test -f "${file}" && source "${file}"
 done
 unset file
 
