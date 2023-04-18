@@ -1,6 +1,9 @@
 # Remove duplicate command in history.
 setopt HIST_IGNORE_ALL_DUPS
 
+# Define workspace base directory
+export WORKSPACE_DIR="${HOME}/workspaces"
+
 # Get custom zsh dirname
 export DOTFILES_DIRNAME="$(dirname $0)"
 

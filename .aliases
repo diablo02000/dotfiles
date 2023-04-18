@@ -11,6 +11,9 @@ alias zsh-reload='source ~/.zshrc'
 # Create working directory
 # use 'createWorkingSpace' from functions file.
 alias cdw='createWorkingSpace'
+alias cdw-="cd ${WORKSPACE_DIR}/$(date -d '-1 day' +%F)"
+alias cdw--="cd ${WORKSPACE_DIR}/$(date -d '-2 day' +%F)"
+alias cdw---="cd ${WORKSPACE_DIR}/$(date -d '-3 day' +%F)"
 
 # Send HTTP curl with JSON content type
 alias jcurl='curl -s -H "Content-Type: application/json"'
