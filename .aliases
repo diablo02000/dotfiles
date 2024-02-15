@@ -14,9 +14,6 @@ alias jcurl='curl -s -H "Content-Type: application/json"'
 # Send HTTP curl with trace time
 alias tcurl='curl -s -o /dev/null -w @"${HOME}/.curl/time-taken.txt"'
 
-# URL-encode strings
-alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
-
 # Get current day
 alias today='date +%F" "%X'
 
@@ -29,15 +26,6 @@ alias hosts="sudo vim /etc/hosts"
 # Show IP addresses
 alias pubip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias privip="ip -j -br -4 addr list | jq -r '.[] | select(.operstate==\"UP\") | .addr_info[].local'"
-
-# Fix trim trailing whitespace from file
-alias ftrailing_whitespace="sed -i 's/[ \t]*$//'"
-
-#
-# Linter
-#
-# Shell linter
-alias scheck='shellcheck -x'
 
 #
 # Database client
