@@ -2,13 +2,6 @@
 # source: https://docs.gitignore.io/install/command-line
 function gi() { curl -sLw n https://www.toptal.com/developers/gitignore/api/$@ ;}
 
-# Create daily working directory.
-function createWorkingSpace() {
-	local WORKSPACE="${HOME}/workspaces/$(date +%F)"
-	[[ ! -d "${WORKSPACE}" ]] && mkdir -p "${WORKSPACE}"
-	cd "${WORKSPACE}"
-}
-
 # Encode string in base64
 function b64encode(){
     local string="${1}"
