@@ -25,7 +25,7 @@ plugins=(... networking)
 
 ### Curl templating
 
-#### Tracing templating
+#### Tracing template
 
 ```
 %{method} %{url} => %{http_code}
@@ -38,4 +38,15 @@ time_redirect:  %{time_redirect} seconds
 time_starttransfer:  %{time_starttransfer} seconds
 ----------
 time_total:  %{time_total} seconds
+```
+
+#### Bandwith template
+
+```
+%{method} %{url} => %{http_code}
+
+download: %{speed_download} bytes/sec
+download size: %{size_download} bytes
+upload: %{speed_upload} bytes/sec
+upload size: %{size_upload} bytes
 ```
