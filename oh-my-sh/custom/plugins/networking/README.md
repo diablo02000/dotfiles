@@ -1,5 +1,7 @@
 # Networking plugin
 
+Add custom alias for networking usage.
+
 To use it, add `networking` to the  plugins array of your `~/.zshrc` file:
 
 ```
