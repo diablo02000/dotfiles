@@ -1,7 +1,7 @@
 # Workspace dir
 
 
-To use it, add `workspace-dir` to the  plugins array of your `~/.zshrc` file:
+To use it, add `workspace-dir` to the plugins array of your `~/.zshrc` file:
 
 ```
 plugins=(... workspace-dir)
@@ -13,9 +13,10 @@ None
 
 ## Aliases
 
-| Alias  | Command                                 | Descriptions                                  |
-|--------|-----------------------------------------|-----------------------------------------------|
-| `cdw`  | `cd ${WORKSPACE_ROOT_DIR}/$(date +%F)`  | Change directory to daily workspace directory |
+| Alias  | Command                                | Descriptions                                  |
+|--------|----------------------------------------|-----------------------------------------------|
+| `cdw`  | `cd ${WORKSPACE_ROOT_DIR}/$(date +%F)` | Change directory to daily workspace directory |
+| `cdrw` | `cd ${WORKSPACE_ROOT_DIR}/$(date +%F)` | Change directory to daily workspace dir selected with fzf |
 
 ## Configuration Variables
 
