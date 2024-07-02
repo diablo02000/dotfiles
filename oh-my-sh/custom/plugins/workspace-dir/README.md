@@ -13,9 +13,10 @@ None
 
 ## Aliases
 
-| Alias  | Command                                 | Descriptions                                  |
-|--------|-----------------------------------------|-----------------------------------------------|
-| `cdw`  | `cd ${WORKSPACE_ROOT_DIR}/$(date +%F)`  | Change directory to daily workspace directory |
+| Alias  | Command                                | Descriptions                                  |
+|--------|----------------------------------------|-----------------------------------------------|
+| `cdw`  | `cd ${WORKSPACE_ROOT_DIR}/$(date +%F)` | Change directory to daily workspace directory |
+| `cdrw` | `cd ${WORKSPACE_ROOT_DIR}/$(date +%F)` | Change directory to daily workspace dir selected with fzf |
 
 ## Configuration Variables
 
