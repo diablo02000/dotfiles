@@ -1,7 +1,7 @@
 # Workspace dir
 
 
-To use it, add `workspace-dir` to the  plugins array of your `~/.zshrc` file:
+To use it, add `workspace-dir` to the plugins array of your `~/.zshrc` file:
 
 ```
 plugins=(... workspace-dir)
