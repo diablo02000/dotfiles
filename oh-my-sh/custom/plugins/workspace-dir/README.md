@@ -12,7 +12,7 @@ A plugin to quickly navigate to daily workspace directories, with support for bo
 - [Configuration](#configuration)
   - [Environment Variables](#environment-variables)
 - [Usage Examples](#usage-examples)
-  - [Aliases](#aliases-1)
+  - [Aliases Examples](#aliases-examples)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -47,7 +47,7 @@ None
 
 ## Usage Examples
 
-### Aliases
+### Aliases Examples
 
 ```zsh
 # Change to today's workspace directory

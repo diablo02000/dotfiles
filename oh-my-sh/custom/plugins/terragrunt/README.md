@@ -11,7 +11,7 @@ working with multiple Terraform modules, and managing remote state. This plugin 
 - [Features](#features)
   - [Aliases](#aliases)
 - [Usage Examples](#usage-examples)
-  - [Aliases](#aliases-1)
+  - [Aliases Examples](#aliases-examples)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -47,7 +47,7 @@ plugins=(... terragrunt)
 
 ## Usage Examples
 
-### Aliases
+### Aliases Examples
 
 ```zsh
 # Initialize Terragrunt/Terraform

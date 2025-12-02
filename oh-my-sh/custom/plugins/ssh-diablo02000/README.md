@@ -1,6 +1,6 @@
 # SSH Diablo02000 Plugin for Oh My Zsh
 
-A custom Oh My Zsh plugin to manage SSH keys, based on the default ssh plugin. It adds convenient aliases for copying SSH keys to the clipboard.
+A custom Oh My Zsh plugin to manage SSH keys, based on the default SSH plugin. It adds convenient aliases for copying SSH keys to the clipboard.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -12,7 +12,7 @@ A custom Oh My Zsh plugin to manage SSH keys, based on the default ssh plugin. I
 - [Configuration](#configuration)
   - [Environment Variables](#environment-variables)
 - [Usage Examples](#usage-examples)
-  - [Aliases](#aliases-1)
+  - [Aliases Examples](#aliases-examples)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -48,7 +48,7 @@ plugins=(... ssh-diablo02000)
 
 ## Usage Examples
 
-### Aliases
+### Aliases Examples
 
 ```zsh
 # Copy public key to clipboard

@@ -1,6 +1,6 @@
 # Networking Plugin for Oh My Zsh
 
-A collection of aliases for networking tasks, including HTTP requests, IP lookups, and curl templating.
+A collection of aliases for networking tasks, including HTTP requests, IP lookups, and cURL templating.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -10,11 +10,11 @@ A collection of aliases for networking tasks, including HTTP requests, IP lookup
 - [Features](#features)
   - [Aliases](#aliases)
 - [Configuration](#configuration)
-  - [Curl Templates](#curl-templates)
+  - [cURL Templates](#curl-templates)
     - [Tracing Templates](#tracing-templates)
     - [Bandwidth Template](#bandwidth-template)
 - [Usage Examples](#usage-examples)
-  - [Aliases](#aliases-1)
+  - [Aliases Examples](#aliases-examples)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -28,7 +28,7 @@ plugins=(... networking)
 
 ## Requirements
 
-- curl – Required for HTTP requests and IP lookups.
+- cURL – Required for HTTP requests and IP lookups.
 
 ## Features
 
@@ -36,14 +36,14 @@ plugins=(... networking)
 
 |Alias|Description|
 |---|---|
-|tcurl|Run curl with tracing and stats output|
-|jcurl|Run curl with Content-Type: application/json|
+|tcurl|Run cURL with tracing and stats output|
+|jcurl|Run cURL with Content-Type: application/JSON|
 |pubip|Fetch your public IP address|
 |privip|Fetch your private IP address|
 
 ## Configuration
 
-### Curl Templates
+### cURL Templates
 
 #### Tracing Templates
 
@@ -71,7 +71,7 @@ upload size:      %{size_upload} bytes
 
 ## Usage Examples
 
-### Aliases
+### Aliases Examples
 
 ```zsh
 # Run curl with tracing

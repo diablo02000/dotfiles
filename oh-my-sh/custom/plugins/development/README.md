@@ -11,8 +11,8 @@ A collection of aliases and functions to streamline development workflows.
   - [Aliases](#aliases)
   - [Functions](#functions)
 - [Usage Examples](#usage-examples)
-  - [Aliases](#aliases-1)
-  - [Functions](#functions-1)
+  - [Aliases Examples](#aliases-examples)
+  - [Functions Examples](#functions-examples)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -52,11 +52,11 @@ Ensure the following tools are installed:
 |gi|Generate .gitignore files using [gitignore.io](https://www.toptal.com/developers/gitignore)|
 |b64encode|Base64-encode a string|
 |b64decode|Base64-decode a string|
-|ggb|Clone a GitHub repo and cd into its directory|
+|ggb|Clone a GitHub repository and cd into its directory|
 
 ## Usage Examples
 
-### Aliases
+### Aliases Examples
 
 ```zsh
 # Validate JSON
@@ -75,7 +75,7 @@ shfmt -w myscript.sh
 ftrailing_whitespace myfile.txt
 ```
 
-### Functions
+### Functions Examples
 
 ```zsh
 # Generate a .gitignore file
