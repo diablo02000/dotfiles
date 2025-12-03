@@ -1,0 +1,19 @@
+# File managed in dofiles project
+# https://github.com/diablo02000/dotfiles
+[tools]
+bat = "latest"
+bats = "latest"
+direnv = "latest"
+fzf = "latest"
+jq = "latest"
+k9s = "latest"
+kubectl = "latest"
+pre-commit = "latest"
+python ="3.13.9"
+ruff = "latest"
+shellcheck = "latest"
+shfmt = "latest"
+uv = "latest"
+yq = "latest"
+[settings]
+idiomatic_version_file_enable_tools = ["python"]

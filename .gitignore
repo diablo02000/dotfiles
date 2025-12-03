@@ -66,3 +66,6 @@ n
 
 # Do not follow user projet configuration file
 .env
+
+# Do not push generated file from script
+log4bash.sh
