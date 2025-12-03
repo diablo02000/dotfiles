@@ -1,97 +1,119 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-# Init ssh key full path with default value.
-DOTFILES_SSH_KEY_FULL_PATH="${HOME}/.ssh/id_rsa"
+# =============================================
+# Script: Deploy Config Files Based on Modules
+# Description: Deploys config files for specified modules.
+# Usage: ./deploy.sh -m "module1,module2"
+# =============================================
 
-# Define Vim directory path
-declare -r DOTFILES_VIM_CONFIG_DIR="${HOME}/.vim"
-declare -r DOTFILES_VIM_AUTOLOAD_DIR="${DOTFILES_VIM_CONFIG_DIR}/autoload"
+# --- Dependency: log4bash ---
+# https://github.com/diablo02000/log4bash.git
+declare -r LOG4BASH_GITHUB_URL="https://raw.githubusercontent.com/diablo02000/log4bash/refs/heads/main/log4bash.sh"
+declare -r LOG4BASH_LIBRAIRY_FILENAME="log4bash.sh"
+declare -r LOG4BASH_CHECKSUM="483e89d9225932dfc58a95387ef3b672b4ca20c2ceb9dc4057d144223dd39c2d"
 
-# Output message to user console.
-function output() {
-	local message="${1}"
-	printf "%b\n" "${message}"
-}
-
-# Load .env file if exists.
-if [[ -f .env ]]; then
-	# Export variable from env file.
-	export "$(xargs <.env)"
-else
-	# Validate path to ssh key
-	read -rp "What is the full Path to your SSH key? [${DOTFILES_SSH_KEY_FULL_PATH}] " user_answer
-	if [[ ${user_answer} != "" ]]; then
-		readonly DOTFILES_SSH_KEY_FULL_PATH="${user_answer}"
+# Download log4bash if missing
+if [[ ! -f "${LOG4BASH_LIBRAIRY_FILENAME}" ]]; then
+	if ! curl -sL -o "${LOG4BASH_LIBRAIRY_FILENAME}" "${LOG4BASH_GITHUB_URL}"; then
+		echo -e "❌ Unexpected error: Failed to download 'log4bash' librairy." >&2
+		exit 1
 	fi
 
-	# Save user answer to env file
-	readarray -t shell_var < <(
-		set -o posix
-		set
-	)
-	for var in "${shell_var[@]}"; do
-		if [[ ${var} =~ 'DOTFILES_' ]]; then
-			echo "DOTFILES_SSH_KEY_FULL_PATH='${DOTFILES_SSH_KEY_FULL_PATH}'" >.env
+	# Verify checksum
+	if ! echo "${LOG4BASH_CHECKSUM}" "${LOG4BASH_LIBRAIRY_FILENAME}" | sha256sum --check --status; then
+		echo -e "❌ Unexpected error: Checksum verification failed for 'log4bash'." >&2
+		exit 1
+	fi
+fi
+
+# Load 'log4bash' librairy
+# shellcheck disable=SC1091
+source log4bash.sh
+
+# Init help variable to false
+HELP=false
+MODULES=""
+
+declare -ra AVAILABLE_MODULES_LIST=("mise")
+
+# Print script usag helper
+usage() {
+	printf "%s\n" \
+		"Usage: $(basename "$0") [-h] [-m MODULES]" \
+		"" \
+		"Options:" \
+		"  -h    Print this help message" \
+		"  -m    Comma-separated list of modules to deploy"
+}
+
+# Verify that module is available in the script
+module_is_valid() {
+	local module="${1}"
+	local is_valid=1
+
+	for available_module in "${AVAILABLE_MODULES_LIST[@]}"; do
+		if [[ "${module}" == "${available_module}" ]]; then
+			is_valid=0
+			break
 		fi
 	done
+
+	return ${is_valid}
+}
+
+deploy_mise() {
+	local mise_config_dir="${HOME}/.config/mise/conf.d"
+	local project_mise_config_dir="mise/conf.d"
+
+	log_info "Deploying 'mise' config"
+
+	if [[ ! -d "${mise_config_dir}" ]]; then
+		log_warn "'${mise_config_dir}' directory is missing. Script is creating it."
+		mkdir -p "${mise_config_dir}"
+	fi
+
+	if ! rsync -a --progress "${project_mise_config_dir}/" "${mise_config_dir}"; then
+		log_error "Failed to deploy mise config in ${mise_config_dir}"
+	fi
+}
+
+# Parse script arguments
+while getopts ":m:h" option; do
+	case $option in
+	m) MODULES=${OPTARG} ;;
+	h) HELP=true ;;
+	:) log_critical "L'option $OPTARG requiert un argument" ;;
+	\?) log_critical "$OPTARG : option invalide" ;;
+	esac
+done
+
+# Print script usage if asked
+if [[ "${HELP}" == true ]]; then
+	usage
+	exit 0
 fi
 
-###
-# Configure Vim
-###
-# Install vim-plug (Required for plugin installation)
-if [[ ! -f "${DOTFILES_VIM_AUTOLOAD_DIR}/plug.vim" ]]; then
-	output "Install vim-plug."
-	curl -fLo "${DOTFILES_VIM_AUTOLOAD_DIR}/plug.vim" --create-dirs "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+# Ensure that user specify modules parameters.
+if [[ -z "${MODULES}" ]]; then
+	log_critical "No modules specified. Use -m to specify modules."
 fi
 
-# Deploy vim user configuration
-output "Deploy Vim user configuration file."
-cp -u .vimrc "${HOME}/.vimrc"
-cp -u .vim/* "${DOTFILES_VIM_CONFIG_DIR}/"
+# --- Main script ---
 
-# Install vim plugins
-vim_plugins_file_timestamp="$(date -r "${DOTFILES_VIM_CONFIG_DIR}/plugins.vim" +%s)"
-modify_timestamp_limit="$(date -d 'now - 2 minutes' +%s)"
+# Convert string to array
+IFS="," read -ra MODULES_LIST <<<"${MODULES// /}"
 
-if [[ $vim_plugins_file_timestamp -ge $modify_timestamp_limit ]]; then
-	output "Install vim plugins."
-	vim +PlugInstall +qall
-fi
+for module in "${MODULES_LIST[@]}"; do
+	# Ensure module is handle by the scriot
+	if ! module_is_valid "${module}"; then
+		log_warn "'${module}' is not a valid module name."
+		continue
+	fi
 
-###
-# Configure tmux
-###
-# Deploy tmux configuration
-output "Deploy tmux configuration."
-cp -u .tmux.conf "${HOME}/.tmux.conf"
-
-###
-# Configure curl
-###
-# Deploy curl output template
-output "Deploy curl user configuration."
-cp -ru .curl "${HOME}/.curl"
-
-###
-# Configure shell
-###
-output "Deploy custom shell configuration."
-cp -ru .functions "${HOME}/"
-envsubst <.aliases >"${HOME}/.aliases"
-
-# Load specific file for Mac OS
-if [[ $OSTYPE == 'darwin'* ]]; then
-	cp .bindkeys_macos "${HOME}/.bindkeys_macos"
-fi
-
-# add shell custom file base on shell
-case ${SHELL} in
-*zsh)
-	cp .zshrc_custom "${HOME}/.zshrc_custom"
-	output "To enable zshrc_custom file to need to add the following command in your ~/.zshrc:\n\tsource ${HOME}/.zshrc_custom"
-	;;
-*)
-	output "Shell ${SHELL} not handle yet."
-	;;
-esac
+	# Run deploy for the module
+	case "${module}" in
+	"mise") deploy_mise ;;
+	*) log_warn "No deployment function define for the module '${module}'." ;;
+	esac
+done
