@@ -5,6 +5,7 @@ bat = "latest"
 bats = "latest"
 direnv = "latest"
 fzf = "latest"
+hadolint = "latest"
 jq = "latest"
 k9s = "latest"
 kubectl = "latest"
@@ -15,5 +16,6 @@ shellcheck = "latest"
 shfmt = "latest"
 uv = "latest"
 yq = "latest"
+
 [settings]
 idiomatic_version_file_enable_tools = ["python"]
