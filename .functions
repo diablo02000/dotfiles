@@ -74,3 +74,13 @@ function ggb() {
   # Change directory to project dir
   cd "${dir}"
 }
+function cdg() {
+  local file
+  file="$(/usr/bin/cat "${HOME}/gits-directory.index" | fzf +m)"
+  echo -e "${file}"
+
+  if [[ -n ${file} ]];
+  then
+    cd "$(dirname ${file})"
+  fi
+}
