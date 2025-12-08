@@ -5,7 +5,10 @@ bat = "latest"
 bats = "latest"
 direnv = "latest"
 fzf = "latest"
+glow = "latest"
+gron = "latest"
 hadolint = "latest"
+hyperfine = "latest"
 jq = "latest"
 k9s = "latest"
 kubectl = "latest"
@@ -16,6 +19,7 @@ shellcheck = "latest"
 shfmt = "latest"
 uv = "latest"
 yq = "latest"
+ytt = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["python"]
