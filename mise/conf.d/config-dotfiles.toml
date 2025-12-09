@@ -4,6 +4,8 @@
 bat = "latest"
 bats = "latest"
 direnv = "latest"
+eza = "latest"
+fd = "latest"
 fzf = "latest"
 glow = "latest"
 gron = "latest"
