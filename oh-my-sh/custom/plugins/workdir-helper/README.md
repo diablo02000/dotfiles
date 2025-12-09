@@ -51,8 +51,12 @@ A plugin to quickly create, manage, archive, and restore workspace directories w
 
 ## 🔧 Requirements
 
-- oh-my-zsh: This plugin is designed for oh-my-zsh.
-- fzf: Required for interactive selection
+- **oh-my-zsh**: This plugin is designed for oh-my-zsh.
+- **mise** (for managing `fd`, `fzf`, and `eza`)
+- **Tools**:
+  - [`fd`](https://github.com/sharkdp/fd)
+  - [`fzf`](https://github.com/junegunn/fzf)
+  - [`eza`](https://github.com/eza-community/eza)
 
 ## 🚀 Usage
 
