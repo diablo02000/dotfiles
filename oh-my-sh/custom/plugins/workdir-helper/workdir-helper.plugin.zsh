@@ -20,7 +20,7 @@ _getWorkingDir() {
 # Returns: Selected workspace directory path.
 _selectWorkingDir() {
   local workspace
-  workspace="$(find "${WORKSPACE_ROOT_DIR}" -mindepth 1 -maxdepth 1 -type d | sort | fzf --preview 'ls -la {}')"
+  workspace="$(fd --min-depth 1 --max-depth 1 --type d . "${WORKSPACE_ROOT_DIR}" | fzf --preview 'eza --icons=auto -T --color=always {}')"
   echo "${workspace}"
 }
 
@@ -29,7 +29,7 @@ _selectWorkingDir() {
 # Returns: Selected archive file path.
 _selectArchivedWorkingDir() {
   local workspace
-  workspace="$(find "${WORKSPACE_ROOT_DIR}" -mindepth 1 -maxdepth 1 -type f -name "*.tar.xz" | sort | fzf --preview 'tar -tf {}')"
+  workspace="$(fd --min-depth 1 --max-depth 1 --type f '.tar.xz$' "${WORKSPACE_ROOT_DIR}" | sort | fzf --preview 'tar -tf {}')"
   echo "${workspace}"
 }
 
