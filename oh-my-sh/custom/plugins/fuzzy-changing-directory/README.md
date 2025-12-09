@@ -1,6 +1,6 @@
 # Fuzzy Directory Changer plugin for Oh My Zsh
 
-A **ZSH plugin** for quickly changing directories using `fd`, `fzf`, and `eza`.
+A **Zsh plugin** for quickly changing directories using `fd`, `fzf`, and `eza`.
 Leverages **mise** for tool management and provides a seamless, interactive way to navigate your filesystem.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -60,7 +60,7 @@ Leverages **mise** for tool management and provides a seamless, interactive way 
 
 |Alias|Command|Description|
 |---|---|---|
-|cdg|`_fuzzy_fd "${HOME}/Gits" ".git$"`|Change to a Git repo in ~/Gits.|
+|cdg|`_fuzzy_fd "${HOME}/Gits" ".git$"`|Change to a Git repository in ~/Gits.|
 
 ## 🎯 Examples
 
