@@ -76,3 +76,31 @@ gi() {
     curl -sLw n https://www.toptal.com/developers/gitignore/api/$@
 }
 
+# =============================================
+# Function: Select and copy emoji to clipboard
+# Description: Fetches a list of emojis, lets the user select one using fzf, and copies it to the clipboard
+# Usage: emojis
+# =============================================
+emojis() {
+    local emojis_url="https://git.io/JXXO7"
+
+    # Fetch the emoji list, use fzf for interactive selection
+    local emoji_selected
+    emoji_selected="$(curl -sL "${emojis_url}" | fzf --height=40%)" || return 1
+
+    # Extract the emoji icon (first field, space-delimited)
+    local emoji
+    emoji="$(cut -d ' ' -f1 <<< "${emoji_selected}")"
+
+    # Copy the emoji to the clipboard using wl-copy (Wayland) or xclip (X11)
+    if command -v wl-copy >/dev/null; then
+        wl-copy "${emoji}"
+    elif command -v xclip >/dev/null; then
+        xclip -selection clipboard <<< "${emoji}"
+    else
+        echo "❌ Error: No clipboard utility found (wl-copy or xclip required)."
+        return 1
+    fi
+
+    echo -e "📋 Emoji stored in clipboard: ${emoji}"
+}
