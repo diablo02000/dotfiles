@@ -135,3 +135,49 @@ ggb() {
         return 1
     }
 }
+
+# =============================================
+# Function: Visualize file content with appropriate tool
+# Description: Opens a file using the best available visualization tool
+#              based on its extension (e.g., `glow` for Markdown, `bat` for others).
+# Usage: viz <file_path>
+# =============================================
+viz() {
+    local file="${1}"
+    local binary
+    local file_ext
+
+    # Check if the file exists
+    if [[ ! -f "${file}" ]]; then
+        echo -e "❌ Error: File '${file}' does not exist."
+        return 1
+    fi
+
+    # Extract file extension
+    file_ext="${file##*.}"
+
+    # Select the appropriate binary based on file extension
+    case "${file_ext}" in
+        "md")
+            binary="glow" ;;
+        "json")
+            binary="jq" ;;
+        "yaml"|"yml")
+            binary="yq" ;;
+        *)
+            binary="bat" ;;
+    esac
+
+    # Check if the selected binary is available
+    if ! command -v "${binary}" >/dev/null 2>&1; then
+        echo -e "❌ Error: '${binary}' is not installed."
+        return 1
+    fi
+
+    # Visualize the file
+    if [[ "${binary}" == "jq" ]] || [[ "${binary}" == "yq" ]]; then
+        "${binary}" < "${file}"
+    else
+        "${binary}" "${file}"
+    fi
+}
