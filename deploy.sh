@@ -81,7 +81,7 @@ deploy_mise_config() {
 
 # Deploy Zsh custom plugins
 deploy_zsh_custom_plugins() {
-	local project_zsh_plugins_dir="oh-my-sh/custom/plugins"
+	local project_zsh_plugins_dir="oh-my-zsh/custom/plugins"
 	local plugins_list="${1:-all}"
 
 	log_info "Deploying Zsh plugins to '${ZSH_PLUGINS_DIR}'"

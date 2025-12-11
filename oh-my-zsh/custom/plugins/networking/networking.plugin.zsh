@@ -1,7 +1,8 @@
+# shellcheck disable=SC2148
 #######
 # HTTP
 #######
-local CURL_TIME_TAKEN_TMPL="
+CURL_TIME_TAKEN_TMPL="
 %{method} %{url} => %{http_code}
 
 time_namelookup:  %{time_namelookup} seconds
@@ -13,7 +14,7 @@ time_starttransfer:  %{time_starttransfer} seconds
 ----------
 time_total:  %{time_total} seconds"
 
-local CURL_BANDWITH_TMPL="
+CURL_BANDWITH_TMPL="
 %{method} %{url} => %{http_code}
 
 download: %{speed_download} bytes/sec

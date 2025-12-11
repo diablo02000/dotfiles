@@ -1,3 +1,4 @@
+# shellcheck disable=SC2148
 alias tg='terragrunt'
 alias tga='terragrunt apply'
 alias tgc='terragrunt console'
