@@ -104,3 +104,34 @@ emojis() {
 
     echo -e "📋 Emoji stored in clipboard: ${emoji}"
 }
+
+# =============================================
+# Function: Clone repository and switch to project directory
+# Description: Clones a repository using git-grab and changes to the local project directory.
+#              Displays the output of git-grab and the directory change status.
+# Usage: ggb <repository_url>
+# =============================================
+ggb() {
+    local url="${1}"
+    local git_grab_output
+    local project_directory
+
+    # Clone the repository using git-grab and display the output
+    git_grab_output=$(git-grab "${url}" | tee /dev/tty)
+
+    # Extract the project directory from the git-grab output
+    project_directory=$(grep -i "Grabbed" <<<"${git_grab_output}" | awk '{print $NF}')
+
+    # Check if the project directory was extracted successfully
+    if [[ -z "${project_directory}" ]]; then
+        echo -e "❌ Error: Could not determine the project directory from git-grab output."
+        return 1
+    fi
+
+    # Attempt to change to the project directory
+    echo -e "▶️ Changing directory to '${project_directory}'"
+    cd "${project_directory}" || {
+        echo -e "❌ Error: Failed to change directory to '${project_directory}'"
+        return 1
+    }
+}
