@@ -13,6 +13,7 @@ Set of several local tools configuration files (Zsh, Git, Tmux ...).
 - [Usage](#usage)
   - [Deploying Configurations](#deploying-configurations)
 - [Available Modules](#available-modules)
+- [Examples](#examples)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -55,6 +56,15 @@ mise install
 
 ## Usage
 
+```zsh
+Usage: deploy.sh [-h] [-m MODULES] [-z ZSH_PLUGINS]
+
+Options:
+  -h    Print this help message
+  -m    Comma-separated list of modules to deploy (e.g., 'mise,zsh-plugins')
+  -z    Comma-separated list of Zsh plugins to deploy (e.g., 'plugin1,plugin2')
+```
+
 ### Deploying Configurations
 
 Use the deploy.sh script to deploy configurations for specific modules.
@@ -70,4 +80,24 @@ The following modules are available for deployment:
 |Module|Description|
 |---|---|
 |mise|Deploys configuration files for [mise](https://mise.jdx.dev/).|
+|zsh-plugins|Deploy Zsh custom plugins|
 
+## Examples
+
+1. Deloy mise configuration
+
+   ```zsh
+   bash ./deploy.sh -m mise
+   ```
+
+2. Deploy All Zsh custom plugins
+
+   ```zsh
+   bash ./deploy.sh -m zsh-plugins
+   ```
+
+3. Deploy several Zsh custom plugins
+
+   ```zsh
+   bash ./deploy.sh -m zsh-plugins -z fuzzy-changing-directory,workdir-helper
+   ```
