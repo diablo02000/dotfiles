@@ -10,8 +10,6 @@ repos:
     hooks:
     - id: shellcheck
     - id: shfmt
-    - id: script-must-have-extension
-      types: [shell, non-executable]
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v4.10.0
     hooks:
