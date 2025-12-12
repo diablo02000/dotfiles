@@ -1,4 +1,4 @@
-# Terragrunt Plugin for Oh My Zsh
+# Terragrunt Extended Plugin for Oh My Zsh
 
 A plugin for Terragrunt, a thin wrapper for Terraform that provides extra tools for keeping your configurations DRY,
 working with multiple Terraform modules, and managing remote state. This plugin adds convenient aliases for common Terragrunt and Terraform commands.
@@ -17,10 +17,10 @@ working with multiple Terraform modules, and managing remote state. This plugin 
 
 ## Installation
 
-Add terragrunt to your Oh My Zsh plugins in ~/.zshrc:
+Add terragrunti-extended to your Oh My Zsh plugins in ~/.zshrc:
 
 ```zsh
-plugins=(... terragrunt)
+plugins=(... terragrunt-extended)
 ```
 
 ## Requirements
@@ -33,17 +33,20 @@ plugins=(... terragrunt)
 
 |Alias|Command|Description|
 |---|---|---|
-|tg|terragrunt|Run Terragrunt commands|
-|tga|terragrunt apply|Apply Terraform changes|
-|tgc|terraform console|Open Terraform console|
-|tgd|terraform destroy|Destroy Terraform-managed infrastructure|
-|tgf|terraform fmt|Format Terraform configuration files|
-|tgi|terraform init|Initialize Terraform configuration|
-|tgo|terraform output|Show Terraform outputs|
-|tgp|terraform plan|Generate and show execution plan|
-|tgv|terraform validate|Validate Terraform configuration|
-|tgs|terraform state|Advanced state management|
-|tgsh|terraform show|Show Terraform state or plan|
+|tg|terragrunt|Run Terragrunt command|
+|tga|terragrunt apply|Apply HCL files|
+|tgc|terragrunt console|Start Terragrunt console|
+|tgd|terragrunt destroy|Destroy resources defined in HCL file|
+|tgf|terragrunt hclfmt|Format HCL file|
+|tgi|terragrunt init|Initialize Terragrunt project|
+|tgo|terragrunt stack output|Retrieve and interact with outputs|
+|tgp|terragrunt plan|Show planned changes|
+|tgpr|terragrunt providers|Show the providers required for this configuration|
+|tgr|terragrunt refresh|Update the state to match remote systems|
+|tgs|terragrunt state|Interact with Terragrunt state|
+|tgsc|terragrunt stack clean|Remove .terragrunt-stack directory|
+|tgsh|terragrunt show|Show current Terragrunt state or plan|
+|tgv|terragrunt hcl validate|Validate HCL files|
 
 ## Usage Examples
 
