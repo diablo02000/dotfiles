@@ -1,8 +1,7 @@
 # shellcheck disable=SC2148
-#######
-# HTTP
-#######
-CURL_TIME_TAKEN_TMPL="
+# -- Templates --
+# Template: Measures and displays timing metrics for each step of a curl request.
+typeset -g CURL_TIME_TAKEN_TMPL="
 %{method} %{url} => %{http_code}
 
 time_namelookup:  %{time_namelookup} seconds
@@ -14,23 +13,25 @@ time_starttransfer:  %{time_starttransfer} seconds
 ----------
 time_total:  %{time_total} seconds"
 
-CURL_BANDWITH_TMPL="
+# Template: Measures TCP bandwidth (download/upload speed and size).
+typeset -g CURL_BANDWITH_TMPL="
 %{method} %{url} => %{http_code}
 
-download: %{speed_download} bytes/sec
-download size: %{size_download} bytes
-upload: %{speed_upload} bytes/sec
-upload size: %{size_upload} bytes"
+download: %{speed_download} bytes/sec (size: %{size_download} bytes)
+upload: %{speed_upload} bytes/sec (size: %{size_upload} bytes)"
 
-# Send HTTP curl with JSON content type
-alias jcurl='curl -s -H "Content-Type: application/json"'
+# -- Aliases --
+# cl: Run curl with silent and follow redirect options.
+alias cl='curl -Ls --show-error'
 
-# Send HTTP curl with trace time
-alias tcurl='curl -s -o /dev/null -w "${CURL_TIME_TAKEN_TMPL}"'
-alias bcurl='curl -s -o /dev/null -w "${CURL_BANDWITH_TMPL}"'
+# jcl: Send HTTP request with JSON Content-Type. Usage: jcl <url>
+alias jcl='curl -Ls --show-error -H "Content-Type: application/json"'
 
-#####
-# IP
-#####
-alias pubip='dig +short myip.opendns.com @resolver1.opendns.com'
-alias privip="ip -j -br -4 addr list | jq -r '.[] | select(.operstate==\"UP\") | .addr_info[].local'"
+# tcl: Send HTTP request and output time taken at each step. Usage: tcl [url]
+alias tcl='curl -Ls -o /dev/null --show-error -w "${CURL_TIME_TAKEN_TMPL}"'
+
+# bcl: Send HTTP request and measure TCP bandwidth. Usage: bcl [url]
+alias bcl='curl -Ls -o /dev/null --show-error -w "${CURL_BANDWITH_TMPL}"'
+
+# vcl: Verbose curl for debugging. Usage: vcl [url]
+alias vcl='curl -Lv'
