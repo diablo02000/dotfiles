@@ -24,3 +24,8 @@ alias hosts="sudo vim /etc/hosts"
 # to file.
 alias psql='dbClientTrace psql'
 alias mysql='dbClientTrace mysql'
+#####
+# IP
+#####
+alias pubip='dig +short myip.opendns.com @resolver1.opendns.com'
+alias privip="ip -j -br -4 addr list | jq -r '.[] | select(.operstate==\"UP\") | .addr_info[].local'"
