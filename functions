@@ -1,0 +1,480 @@
+# =============================================
+# Function: Print a formatted error message to stderr
+# Description: Prints an error message with a consistent format.
+#              Returns 1 if no text is provided.
+# Usage: _print_error "Something went wrong"
+# =============================================
+_print_error() {
+    local text="${1}"
+
+    if [[ -z "${text}" ]]; then
+        printf "❌ Error: No text provided to output.\n" >&2
+	return 1
+    fi
+
+    printf "❌ Error: %s\n" "${text}" >&2
+}
+
+# =============================================
+# Function: Copy text to clipboard (Wayland/X11)
+# Description: Copies provided text to clipboard using wl-copy (Wayland)
+#              or xclip (X11). Fails gracefully if neither is available.
+# Usage: _copy_text_to_clipboard "text to copy"
+# Returns: 0 on success, 1 on failure
+# =============================================
+_copy_text_to_clipboard() {
+    local text="${1}"
+    local max_size=$((1024 * 1024))  # 1 MB in bytes
+
+    if [[ -z "${text}" ]]; then
+    	_print_error "No text provided to copy."
+	return 1
+    fi
+
+    local text_size=${#text}
+
+    if [[ "${text_size}" -gt "${max_size}" ]]; then
+        _print_error "Text is too large (${text_size} bytes). Maximum allowed size is ${max_size} bytes."
+        return 1
+    fi
+
+    if command -v wl-copy >/dev/null; then
+        if ! wl-copy -- "${text}"; then
+		_print_error "wl-copy failed to copy text."
+		 return 1
+	fi
+    elif command -v xclip >/dev/null; then
+        if ! xclip -selection clipboard <<< "${text}"; then
+		_print_error "xclip failed to copy text."
+		return 1
+	fi
+    else
+        _print_error "No clipboard utility found (wl-copy or xclip required)."
+        return 1
+    fi
+    return 0
+}
+
+# =============================================
+# Function: Copy file content to clipboard
+# Description: Copies the content of a specified file to the clipboard using `wl-copy` (Wayland) or `xclip` (X11).
+#              Fails if the file does not exist, is not readable, or if no clipboard utility is found.
+# Usage: _copy_file_content_to_clipboard <file_path>
+# =============================================
+_copy_file_content_to_clipboard() {
+    local file="${1}"
+    local max_size=$((1024 * 1024))  # 1 MB in bytes
+
+    if [[ -z "${file}" ]]; then
+    	_print_error "No file provided to copy."
+	return 1
+    fi
+
+    if [[ ! -f "${file}" ]]; then
+        _print_error "'${file}' does not exists."
+        return 1
+    fi
+
+    if [[ ! -r "${file}" ]]; then
+        _print_error "'${file}' is not readable."
+        return 1
+    fi
+
+    if [[ ! -s "${file}" ]]; then
+        _print_error "'${file}' is empty."
+        return 1
+    fi
+
+    if ! file "${file}" | grep -q "text"; then
+        _print_error "'${file}' is not a text file."
+        return 1
+    fi
+
+    local file_size
+    file_size=$(stat -c %s "${file}")
+
+    if [[ "${file_size}" -gt "${max_size}" ]]; then
+        _print_error "'${file}' is too large (${file_size} bytes). Maximum allowed size is ${max_size} bytes."
+        return 1
+    fi
+
+    if command -v wl-copy >/dev/null; then
+        if ! wl-copy < "${file}"; then
+		_print_error "wl-copy failed to copy file content."
+		 return 1
+	fi
+    elif command -v xclip >/dev/null; then
+        if ! xclip -selection clipboard "${file}"; then
+		_print_error "xclip failed to copy file content."
+		return 1
+	fi
+    else
+        _print_error "No clipboard utility found (wl-copy or xclip required)."
+        return 1
+    fi
+    return 0
+}
+
+# =============================================
+# Function: Copy text or file content to clipboard
+# Description: Detects whether the input is a file or text and copies its content to the clipboard.
+#              Uses helper functions for text and file content.
+# Usage: clip <text_or_file>
+# =============================================
+clip() {
+    local arg="${1}"
+    if [[ -z "${arg}" ]]; then
+    	_print_error "No text or file name provided to copy."
+	return 1
+    fi
+
+    if [[ -f "${arg}" ]]; then
+        _copy_file_content_to_clipboard "${arg}"
+        printf "📋 Content of '%s' copied to clipboard.\n" "${arg}"
+    else
+        _copy_text_to_clipboard "${arg}"
+        printf "📋 Content '%s' copied to clipboard.\n" "${arg}"
+    fi
+}
+
+
+# Run db client like psql or mysql  and store
+# console output to log file.
+function dbClientTrace(){
+  # Get db client tool name
+  local DB_CLIENT_TOOL_NAME="${1}"
+  shift
+
+  # Get username and database name
+  # from command arguments
+  POSITIONAL_ARGS=()
+
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      -U|-u)
+        DB_USERNAME="$2"
+        shift
+        shift
+        ;;
+      -d|-D)
+        DB_NAME="$2"
+        shift
+        shift
+        ;;
+      *)
+        POSITIONAL_ARGS+=("$1")
+        shift
+        ;;
+    esac
+  done
+
+  set -- "${POSITIONAL_ARGS[@]}"
+
+  # Create path to log file
+  local DB_CLIENT_LOG_FILE="$(printf "%s/%s-%s-%s-%d.log" "/var/log/db_client" ${DB_CLIENT_TOOL_NAME} ${DB_USERNAME} ${DB_NAME} $(date +%s))"
+
+  # Build client cmd
+  if [[ ${DB_CLIENT_TOOL_NAME} == "mysql" ]];
+  then
+    \mysql $@ -u "${DB_USERNAME}" -D "${DB_NAME}" --tee="${DB_CLIENT_LOG_FILE}"
+  elif [[ ${DB_CLIENT_TOOL_NAME} == "psql" ]];
+  then
+    \psql $@ -U "${DB_USERNAME}" -d "${DB_NAME}" -L "${DB_CLIENT_LOG_FILE}"
+  else
+    echo -e "${DB_CLIENT_TOOL_NAME} not manage"
+  fi
+}
+
+# Push gitlab pipeline YAML file to
+# Gitlab Linter API endpoint for syntax
+# verification
+function gitlabCiLinter(){
+  # Get path to gitlab-ci file.
+  local gitlab_ci_file="${1:=.gitlab-ci.yml}"
+
+  if [[ -z $GITLAB_HOST ]] || [[ -z $GITLAB_PRIVATE_TOKEN ]];
+  then
+    echo -e "'GITLAB_HOST' or 'GITLAB_PRIVATE_TOKEN' variables not define."
+  else
+    # Send gitlab-ci file content to API.
+    jq --null-input --arg yaml "$(<${gitlab_ci_file})" '.content=$yaml' \
+    | curl --header "PRIVATE-TOKEN: ${GITLAB_PRIVATE_TOKEN}" \
+          --header 'Content-Type: application/json' \
+          "https://${GITLAB_HOST}/api/v4/ci/lint?include_merged_yaml=true" --data @- | jq
+  fi
+}
+
+# =============================================
+# Function: Generate .gitignore file
+# Description: Fetches a .gitignore template for specified languages/tools from gitignore.io
+# Usage: gi <language/tool1>,<language/tool2> ...
+# Source: https://docs.gitignore.io/install/command-line
+# =============================================
+gi() {
+    if [[ -z "$@" ]]; then
+        _print_error "No language/tool specified for .gitignore."
+        return 1
+    fi
+
+    if [[ -f ".gitignore" ]];
+    then
+        printf "'.gitignore' file already exists. Backing it up to '.gitignore.backup'...\n"
+        if ! cp ".gitignore" ".gitignore.backup"; then
+            _print_error "Failed to backup '.gitignore' file."
+            return 1
+        fi
+    fi
+
+    # Use curl to fetch the .gitignore template silently (-s), follow redirects (-L),
+    # and suppress the progress meter but show errors (-w n)
+    local tmp_gitignore="$(mktemp)"
+    if ! curl -sLw n -o "${tmp_gitignore}" "https://www.toptal.com/developers/gitignore/api/$@"; then
+        _print_error "Failed to fetch .gitignore template."
+        rm -f "${tmp_gitignore}"
+        return 1
+    fi
+
+    mv "${tmp_gitignore}" ".gitignore"
+    printf "📋 '.gitignore' file created for '$@' tools"
+}
+
+# =============================================
+# Function: Select and copy emoji to clipboard
+# Description: Fetches a list of emojis, lets the user select one using fzf, and copies it to the clipboard
+# Usage: emojis
+# =============================================
+emojis() {
+    local emojis_url="https://git.io/JXXO7"
+
+    if ! command -v fzf >/dev/null 2>&1; then
+        _print_error "'fzf' is not installed"
+        return 1
+    fi
+
+    # Fetch the emoji list, use fzf for interactive selection
+    local emoji_selected
+    emoji_selected="$(curl -sL "${emojis_url}" | fzf --height=40%)" || return 1
+
+    # Extract the emoji icon (first field, space-delimited)
+    local emoji
+    emoji="$(cut -d ' ' -f1 <<< "${emoji_selected}")"
+
+    # Copy the emoji to the clipboard using wl-copy (Wayland) or xclip (X11)
+    if ! _copy_text_to_clipboard "${emoji}"; then
+        return 1
+    fi
+
+    printf "📋 Emoji stored in clipboard: %s" "${emoji}"
+}
+
+# =============================================
+# Function: Clone repository and switch to project directory
+# Description: Clones a repository using git-grab and changes to the local project directory.
+#              Displays the output of git-grab and the directory change status.
+# Usage: ggb <repository_url>
+# =============================================
+ggb() {
+    local url="${1}"
+    local git_grab_output
+    local project_directory
+
+    # Clone the repository using git-grab and display the output
+    git_grab_output=$(git-grab "${url}" | tee /dev/tty)
+
+    # Extract the project directory from the git-grab output
+    project_directory=$(grep -i "Grabbed" <<<"${git_grab_output}" | awk '{print $NF}')
+
+    # Check if the project directory was extracted successfully
+    if [[ -z "${project_directory}" ]]; then
+        _print_error "Could not determine the project directory from git-grab output."
+        return 1
+    fi
+
+    # Attempt to change to the project directory
+    printf "▶️ Changing directory to '%s'" "${project_directory}"
+    cd "${project_directory}" || {
+        _print_error "Failed to change directory to '${project_directory}'"
+        return 1
+    }
+}
+
+# =============================================
+# Function: Visualize file content with appropriate tool
+# Description: Opens a file using the best available visualization tool
+#              based on its extension (e.g., `glow` for Markdown, `bat` for others).
+# Usage: viz <file_path>
+# =============================================
+viz() {
+    local file="${1}"
+    local binary
+    local file_ext
+
+    # Check if the file exists
+    if [[ ! -f "${file}" ]]; then
+        _print_error "File '${file}' does not exist."
+        return 1
+    fi
+
+    # Extract file extension
+    file_ext="${file##*.}"
+
+    # Enforce empty file ext value for file without extension
+    if [[ "${file_ext}" == "${file}" ]]; then
+        file_ext=""
+    fi
+
+    # Select the appropriate binary based on file extension
+    case "${file_ext}" in
+        "md")
+            binary="glow" ;;
+        "json")
+            binary="jq" ;;
+        "yaml"|"yml")
+            binary="yq" ;;
+        *)
+            binary="bat" ;;
+    esac
+
+    # Check if the selected binary is available
+    if ! command -v "${binary}" >/dev/null 2>&1; then
+        _print_error "'${binary}' is not installed."
+        return 1
+    fi
+
+    # Visualize the file
+    if [[ "${binary}" == "jq" ]] || [[ "${binary}" == "yq" ]]; then
+        "${binary}" < "${file}"
+    else
+        "${binary}" "${file}"
+    fi
+}
+
+# =============================================
+# Function: Get current public IP and store it in clipboard
+# Description: Send DNS request to OpenDNS resolver to get current IP
+#              and store output in clipboard. Fails if IP cannot be retrieved.
+# Usage: pubip
+# =============================================
+pubip() {
+    local public_ip
+    public_ip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
+
+    if [[ -z "${public_ip}" ]]; then
+        _print_error "Failed to retrieve public IP"
+        return 1
+    fi
+
+    # Copy the public IP to the clipboard using wl-copy (Wayland) or xclip (X11)
+    if ! _copy_text_to_clipboard "${public_ip}"; then
+        return 1
+    fi
+
+    printf "▶️ Current Public IP stored in clipboard: '%s'.\n" "${public_ip}"
+}
+
+# =============================================
+# Function: Get current private IP and store it in clipboard
+# Description: Uses `ip` and `jq` to fetch the private IP and copy it to the clipboard.
+# Usage: privip
+# =============================================
+privip() {
+    local private_ip
+
+    if ! command -v jq >/dev/null 2>&1; then
+        _print_error "'jq' is not installed"
+        return 1
+    fi
+
+    private_ip="$(ip -j -br -4 addr list | jq -r '.[] | select(.operstate=="UP") | .addr_info[].local')"
+
+    if [[ -z "${private_ip}" ]]; then
+        _print_error "Failed to retrieve private IP"
+        return 1
+    fi
+
+    # Copy the privqte IP to the clipboard using wl-copy (Wayland) or xclip (X11)
+    if ! _copy_text_to_clipboard "${private_ip}"; then
+        return 1
+    fi
+
+    printf "▶️ Current Private IP stored in clipboard: '%s'.\n" "${private_ip}"
+
+}
+
+# =============================================
+# Function: Update Powerlevel10k theme
+# Description: Updates the Powerlevel10k theme in the Zsh custom themes directory.
+#              Checks for Git availability, directory existence, and repository status.
+# Usage: pk10u
+# =============================================
+pk10u() {
+    local powerlevel10k_theme_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+    local default_origin_branch
+
+    if [[ ! -d "${powerlevel10k_theme_dir}" ]]; then
+        _print_error "Powerlevel10k directory does not exist in Zsh theme directory"
+        return 1
+    fi
+
+    if ! cd "${powerlevel10k_theme_dir}"; then
+        _print_error "Failed to switch directory to '${powerlevel10k_theme_dir}'"
+        return 1
+    fi
+
+    if ! command -v git >/dev/null 2>&1; then
+        _print_error "'git' is not installed."
+        return 1
+    fi
+
+    if ! git -C "${powerlevel10k_theme_dir}" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        _print_error "'${powerlevel10k_theme_dir}' is not a Git repository."
+        return 1
+    fi
+
+    default_origin_branch="$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')"
+    if [[ -z "${default_origin_branch}" ]]; then
+        _print_error "Failed to update local repository. Check for conflicts or network issues."
+        return 1
+    fi
+
+    if ! git pull origin "${default_origin_branch}"; then
+        _print_error "Failed to update local repository"
+        return 1
+    fi
+
+    printf "🚀 Powerlevel10k Theme updated from '%s'\n" "${default_origin_branch}"
+}
+
+# =============================================
+# Function: Select and copy SSH key to clipboard
+# Description: Lists SSH keys in `SSH_KEYS_DIR`, lets the user select one using `fzf`,
+#              and copies its content to the clipboard.
+# Usage: sshkey
+# =============================================
+sshkey() {
+    if [[ -z "${SSH_KEYS_DIR}" ]];  then
+        _print_error "Required 'SSH_KEYS_DIR' variable not define"
+        return 1
+    fi
+
+    if ! command -v fzf >/dev/null 2>&1; then
+        _print_error "'fzf' is not installed."
+        return 1
+    fi
+
+    ssh_key_file="$(ls "${SSH_KEYS_DIR}" | fzf +m)"
+
+    if [[ -z "${ssh_key}" ]]; then
+        _print_error "No SSH key selected."
+        return 1
+    fi
+
+    local ssh_key="${SSH_KEYS_DIR}/${ssh_key_file}"
+    printf "🔑 Selected SSH key: '%s'\n" "${ssh_key}"
+
+    if ! clip "${ssh_key}"; then
+        return 1
+    fi
+
+    printf "📋 SSH Key content of '%s' copied to clipboard.\n" "${ssh_key}"
+}
