@@ -1,0 +1,57 @@
+# =============================================
+# Alias: Extended `cd` commands for specific directories
+# Description: Quickly navigate to common user directories.
+# Usage:
+#   cdd   -> Documents
+#   cdi   -> Images
+#   cdt   -> Downloads
+#   cdm   -> Musique
+#   cdp   -> Projets
+#   cds   -> Scripts
+#   cdv   -> Videos
+# =============================================
+alias cdd='cd ${HOME}/Documents'
+alias cdi='cd ${HOME}/Images'
+alias cdt='cd ${HOME}/Downloads'
+alias cdm='cd ${HOME}/Musique'
+alias cdp='cd ${HOME}/Projets'
+alias cds='cd ${HOME}/Scripts'
+alias cdv='cd ${HOME}/Videos'
+
+# =============================================
+# Alias: Reload Zsh configuration
+# Description: Reloads the current shell's configuration by sourcing ~/.zshrc.
+# Usage: zsh-reload
+# =============================================
+alias zsh-reload='source ~/.zshrc'
+
+# =============================================
+# Alias: Date and Time
+# Description: Print the current date and time in a readable format.
+# Usage: today
+# Output: YYYY-MM-DD HH:MM:SS
+# =============================================
+alias today='date +%F" "%X'
+
+# =============================================
+# Alias: Current Week Number
+# Description: Print the current ISO week number.
+# Usage: week
+# Output: WW (e.g., 01, 52)
+# =============================================
+alias week='date +%V'
+
+# =============================================
+# Alias: Edit /etc/hosts
+# Description: Open the /etc/hosts file in Vim with sudo privileges.
+# Usage: hosts
+# =============================================
+alias hosts="sudo vim /etc/hosts"
+
+#
+# Database client
+#
+# Overload db client to redirect console
+# to file.
+alias psql='dbClientTrace psql'
+alias mysql='dbClientTrace mysql'
