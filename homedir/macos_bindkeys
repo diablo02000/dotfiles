@@ -1,6 +1,6 @@
 # Bind key in zsh terminal for Mac OS X
 
 # Use cmd + ->/<- to move backward/forward a word
-# instead of esc + A/E 
+# instead of esc + A/E
 bindkey "[D" backward-word
 bindkey "[C" forward-word
