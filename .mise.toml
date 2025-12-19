@@ -1,5 +1,6 @@
 [tools]
+actionlint = "latest"
 pre-commit = "latest"
 shellcheck = "latest"
 shfmt      = "latest"
-actionlint = "latest"
+usage = "latest"
