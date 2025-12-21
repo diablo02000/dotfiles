@@ -431,3 +431,53 @@ sshkey() {
 
     printf "📋 SSH Key content of '%s' copied to clipboard.\n" "${ssh_key}"
 }
+
+# =============================================
+# Function: Git Clean Branches (gcb)
+# Description: Syncs with the default remote branch, pulls the latest changes,
+#              and cleans up local branches that have been merged into the default branch.
+# Usage: gcb
+# =============================================
+gcb() {
+    local default_origin_branch
+
+    if ! command -v git >/dev/null 2>&1; then
+        _print_error "'git' is not installed."
+        return 1
+    fi
+
+    if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        _print_error "Current directory is not a Git repository."
+        return 1
+    fi
+
+    default_origin_branch="$(git symbolic-ref refs/remotes/origin/HEAD | awk '/HEAD branch/ {print $NF}')"
+    if [[ -z "${default_origin_branch}" ]]; then
+        _print_error "Failed to get default branch. Check for conflicts or network issues."
+        return 1
+    fi
+
+    if ! git checkout "${default_origin_branch}"; then
+        _print_error "Failed to checkout to '${default_origin_branch}'"
+        return 1
+    fi
+
+    if ! git pull origin "${default_origin_branch}"; then
+        _print_error "Failed to update local repository"
+        return 1
+    fi
+
+    printf "🧹 Cleaing up merged branches ...\n"
+
+    if ! git branch --merged "${default_origin_branch}" | grep -v "^\*\|main\|master\|develop" | tee /dev/tty | xargs -n 1 git branch -d; then
+        _print_error "Failed to clean merged branches"
+        return 1
+    fi
+
+    printf "🌍 Remotes branches (FYI):\n"
+    git fetch --prune
+    git branch -r | grep -v "main\|master\|develop"
+
+    printf "✨ Cleanup complete! \n"
+
+}
