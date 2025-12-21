@@ -18,6 +18,14 @@ alias cdp='cd ${HOME}/Projets'
 alias cds='cd ${HOME}/Scripts'
 alias cdv='cd ${HOME}/Videos'
 
+
+# =============================================
+# Alias: Print directories as tree view
+# Description: List directories and files as tree view.
+# Usage: tree
+# =============================================
+alias tree='eza -T --icons=auto --color=always'
+
 # =============================================
 # Alias: Reload Zsh configuration
 # Description: Reloads the current shell's configuration by sourcing ~/.zshrc.
