@@ -485,3 +485,72 @@ git-clean() {
     printf "\n✨ Cleanup complete! \n"
 
 }
+
+# =============================================
+# Function: Interactive Git Branch Selector (git-branch)
+# Description: Lists all local Git branches in the current repository and allows the user
+#              to interactively select one using `fzf`. The selected branch name is printed
+#              to stdout, making it easy to use in scripts or pipelines.
+# Dependencies: Requires `fzf` for interactive selection.
+# Usage: git-branch
+# =============================================
+git-branch() {
+    if ! command -v fzf >/dev/null 2>&1; then
+        _print_error "'fzf' is not installed."
+        return 1
+    fi
+
+    if ! command -v git >/dev/null 2>&1; then
+        _print_error "'git' is not installed."
+        return 1
+    fi
+
+    branch="$(git for-each-ref --format='%(refname:short)' refs/heads/ | fzf +m)"
+    if [[ -z "${branch}" ]]; then
+        _print_error "No branch selected."
+        return 1
+    fi
+
+    echo "git checkout \"${branch}\""
+    if ! git checkout "${branch}"; then
+        _print_error "Failed to switch to '${branch}' branch"
+        return 1
+    fi
+
+    printf "▶️ Current branch is: '%s'.\n" "${branch}"
+}
+
+# =============================================
+# Function: Copy Git Branch to Clipboard (git-current-branch)
+# Description: Lists all local Git branches in the current repository using `fzf` for interactive selection.
+#              Copies the selected branch name to the clipboard using the `clip` function.
+#              Provides user feedback upon success or failure.
+# Dependencies:
+#   - Requires `fzf` for interactive branch selection.
+#   - Requires `git` to fetch branch information.
+#   - Requires `clip` (or a clipboard utility) to copy the branch name.
+# Usage: git-current-branch
+# =============================================
+git-current-branch() {
+    if ! command -v fzf >/dev/null 2>&1; then
+        _print_error "'fzf' is not installed."
+        return 1
+    fi
+
+    if ! command -v git >/dev/null 2>&1; then
+        _print_error "'git' is not installed."
+        return 1
+    fi
+
+    branch="$(git for-each-ref --format='%(refname:short)' refs/heads/ | fzf +m)"
+    if [[ -z "${branch}" ]]; then
+        _print_error "No branch selected."
+        return 1
+    fi
+
+    if ! clip "${branch}"; then
+        return 1
+    fi
+
+    printf "📋 Current branch '%s' copied to clipboard.\n" "${branch}"
+}
