@@ -54,15 +54,24 @@ alias week='date +%V'
 # Description: Open the /etc/hosts file in Vim with sudo privileges.
 # Usage: hosts
 # =============================================
-alias hosts="sudo vim /etc/hosts"
+alias hosts='sudo vim /etc/hosts'
 
 # =============================================
-# Alias: Run command against Kubernetes clusters.
-# Description: Use kubecolor instead of kubectl.
-# Usage: k
+# Alias: Kubernetes Color
+# Description: Shortcut for `kubecolor`, a tool to colorize kubectl output for better readability.
+# Usage: k [kubectl arguments]
+# Example: k get pods
 # =============================================
-alias k="kubecolor"
+alias k='kubecolor'
 
+# =============================================
+# Alias: Enhanced `cat` with `bat`
+# Description: Replaces the default `cat` command with `bat`, a modern alternative with syntax highlighting and Git integration.
+#              Disables paging and forces color output for better readability in terminals and pipelines.
+# Usage: cat [file]
+# Example: cat myfile.conf
+# =============================================
+alias cat='bat --paging=never --color=always'
 # Database client
 #
 # Overload db client to redirect console
