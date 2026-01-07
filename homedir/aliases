@@ -72,6 +72,20 @@ alias k='kubecolor'
 # Example: cat myfile.conf
 # =============================================
 alias cat='bat --paging=never --color=always'
+
+# =============================================
+# Alias: Docker Image Explorer (Dive)
+# Description: Shortcut to run `dive`, a tool for exploring Docker images interactively.
+#              Mounts the Docker socket to allow Dive to analyze local Docker images.
+#              Automatically removes the container after exit (`--rm`).
+# Usage: dive [IMAGE_NAME]
+# Example: dive ubuntu:latest
+# Requirements:
+#   - Docker must be installed and running.
+#   - The `dive` image (`wagoodman/dive`) will be pulled automatically if not present.
+# =============================================
+alias dive='docker run -ti --rm  -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive'
+
 # Database client
 #
 # Overload db client to redirect console
