@@ -20,7 +20,7 @@ if [[ ! -f "${LOG4BASH_LIBRARY_FILENAME}" ]]; then
 		exit 1
 	fi
 
-	printf "✅ Log4bash librairy downloaded."
+	printf "✅ Log4bash library downloaded."
 else
-	printf "▶️ Log4bash librairy already downloaded."
+	printf "▶️ Log4bash library already downloaded."
 fi
