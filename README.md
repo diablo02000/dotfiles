@@ -37,7 +37,7 @@ After installation, restart your shell or run:
 source "\$HOME/.local/share/mise/mise.sh"
 ```
 
-For more informations, check the official [mise](https://mise.jdx.dev/getting-started.html) site.
+For more information, check the official [mise](https://mise.jdx.dev/getting-started.html) site.
 
 ### 2. Clone the Repository
 
